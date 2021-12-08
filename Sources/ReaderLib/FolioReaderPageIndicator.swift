@@ -35,6 +35,9 @@ class FolioReaderPageIndicator: UIView {
         layer.shadowPath = UIBezierPath(rect: bounds).cgPath
         layer.rasterizationScale = UIScreen.main.scale
         layer.shouldRasterize = true
+        
+        totalPages = 1
+        totalMinutes = 1
 
         pagesLabel = UILabel(frame: CGRect.zero)
         pagesLabel.font = UIFont(name: "Avenir-Light", size: 10)!
