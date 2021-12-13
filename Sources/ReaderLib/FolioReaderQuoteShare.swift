@@ -35,7 +35,7 @@ class FolioReaderQuoteShare: UIViewController {
         self.quoteText = shareText.stripLineBreaks().stripHtml()
         self.book = book
 
-        super.init(nibName: nil, bundle: Bundle.module)
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -158,7 +158,7 @@ class FolioReaderQuoteShare: UIViewController {
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
 
-        let background = self.folioReader.isNight(self.readerConfig.nightModeBackground, self.readerConfig.menuBackgroundColor)
+        let background = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
 
         // CollectionView

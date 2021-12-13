@@ -5,7 +5,6 @@
 //  Created by Kevin Jantzer on 1/6/16.
 //  Copyright (c) 2016 Folio Reader. All rights reserved.
 //
-
 import UIKit
 
 class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
@@ -43,7 +42,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
         // Menu view
         menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-165, width: view.frame.width, height: view.frame.height))
-        menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeNavBackground, self.readerConfig.daysModeNavBackground)
+        menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
         menuView.autoresizingMask = .flexibleWidth
         menuView.layer.shadowColor = UIColor.black.cgColor
         menuView.layer.shadowOffset = CGSize(width: 0, height: 0)
@@ -62,7 +61,6 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let gutterX = (Int(view.frame.width) - (size * 3 ) - (padX * 4) ) / 2
 
         //let btnX = (Int(view.frame.width) - (size * 3)) / 4
-
         // get icon images
         let play = UIImage(readerImageNamed: "play-icon")
         let pause = UIImage(readerImageNamed: "pause-icon")
@@ -142,8 +140,8 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
         style0.titleLabel!.textAlignment = .center
         style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor), for: UIControl.State())
-        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor), for: .selected)
+        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControl.State())
+        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
         style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
         menuView.addSubview(style0);
         style0.titleLabel?.sizeToFit()
@@ -223,13 +221,11 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     }
 
     // MARK: - Status Bar
-
     override var prefersStatusBarHidden : Bool {
         return (self.readerConfig.shouldHideNavigationOnTap == true)
     }
 
     // MARK: - SMSegmentView delegate
-
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
         guard viewDidAppear else { return }
 
@@ -267,7 +263,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
         // update the current page style
         if let currentPage = self.folioReader.readerCenter?.currentPage {
-            currentPage.webView?.js("setMediaOverlayStyle(\"\(self.folioReader.currentMediaOverlayStyle.className())\")")
+            currentPage.webView?.js("setMediaOverlayStyle(\"\(self.folioReader.currentMediaOverlayStyle.className())\")") { _ in }
         }
     }
 

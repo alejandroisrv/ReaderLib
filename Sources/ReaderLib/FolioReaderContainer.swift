@@ -17,7 +17,7 @@ open class FolioReaderContainer: UIViewController {
     // Mark those property as public so they can accessed from other classes/subclasses.
     public var epubPath: String
 	public var unzipPath: String?
-    var decryptionKey: String
+    public var book: FRBook
     
     public var centerNavigationController: UINavigationController?
     public var centerViewController: FolioReaderCenter?
@@ -38,15 +38,15 @@ open class FolioReaderContainer: UIViewController {
     ///   - path: The ePub path on system. Must not be nil nor empty string.
 	///   - unzipPath: Path to unzip the compressed epub.
     ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-    public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, unzipPath: String? = nil, decryptionKey: String = "", removeEpub: Bool = true) {
+    public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, unzipPath: String? = nil, removeEpub: Bool = true) {
         self.readerConfig = config
         self.folioReader = folioReader
         self.epubPath = path
 		self.unzipPath = unzipPath
         self.shouldRemoveEpub = removeEpub
-        self.decryptionKey = decryptionKey
-        
-        super.init(nibName: nil, bundle: Bundle.module)
+        self.book = FRBook()
+
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
 
         // Configure the folio reader.
         self.folioReader.readerContainer = self
@@ -65,8 +65,8 @@ open class FolioReaderContainer: UIViewController {
         self.readerConfig = FolioReaderConfig()
         self.folioReader = FolioReader()
         self.epubPath = ""
-        self.decryptionKey = ""
         self.shouldRemoveEpub = false
+        self.book = FRBook()
 
         super.init(coder: aDecoder)
 
@@ -77,7 +77,7 @@ open class FolioReaderContainer: UIViewController {
     /// Common Initialization
     fileprivate func initialization() {
         // Register custom fonts
-        FontBlaster.blast(bundle: Bundle.module)
+        FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
         // Register initial defaults
         self.folioReader.register(defaults: [
@@ -155,21 +155,23 @@ open class FolioReaderContainer: UIViewController {
             return
         }
 
-         DispatchQueue.main.async {
-            
+        DispatchQueue.global(qos: .userInitiated).async {
+
             do {
-                let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath, key: self.decryptionKey)
+                let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath)
+                self.book = parsedBook
                 self.folioReader.isReaderOpen = true
-                BookProvider.shared.currentBook = parsedBook
-                
+
                 // Reload data
-                // Add audio player if needed
-                if BookProvider.shared.currentBook.hasAudio || self.readerConfig.enableTTS {
-                    self.addAudioPlayer()
+                DispatchQueue.main.async {
+                    // Add audio player if needed
+                    if self.book.hasAudio || self.readerConfig.enableTTS {
+                        self.addAudioPlayer()
+                    }
+                    self.centerViewController?.reloadData()
+                    self.folioReader.isReaderReady = true
+                    self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
                 }
-                self.centerViewController?.reloadData()
-                self.folioReader.isReaderReady = true
-                self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: BookProvider.shared.currentBook)
             } catch {
                 self.errorOnLoad = true
                 self.alert(message: error.localizedDescription)
@@ -189,7 +191,7 @@ open class FolioReaderContainer: UIViewController {
      Initialize the media player
      */
     func addAudioPlayer() {
-        self.audioPlayer = FolioReaderAudioPlayer(withFolioReader: self.folioReader, book: BookProvider.shared.currentBook)
+        self.audioPlayer = FolioReaderAudioPlayer(withFolioReader: self.folioReader, book: self.book)
         self.folioReader.readerAudioPlayer = audioPlayer
     }
 

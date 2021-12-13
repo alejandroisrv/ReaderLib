@@ -5,12 +5,10 @@
 //  Created by Heberti Almeida on 08/04/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
-
 import Foundation
 import UIKit
 
 // MARK: - Internal constants
-
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
 internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
@@ -23,28 +21,21 @@ internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
-public extension Notification.Name {
-    static let folioReaderPresentationCompleted = Notification.Name("folioReaderPresentationComplete")
-}
-
 public enum FolioReaderError: Error, LocalizedError {
     case bookNotAvailable
     case errorInContainer
     case errorInOpf
-    case errorInSmil
-    case errorInTOC
     case authorNameNotAvailable
     case coverNotAvailable
     case invalidImage(path: String)
     case titleNotAvailable
     case fullPathEmpty
-    case decrpytionFailed
 
     public var errorDescription: String? {
         switch self {
         case .bookNotAvailable:
             return "Book not found"
-        case .errorInContainer, .errorInOpf, .errorInSmil, .errorInTOC:
+        case .errorInContainer, .errorInOpf:
             return "Invalid book format"
         case .authorNameNotAvailable:
             return "Author name not available"
@@ -56,8 +47,6 @@ public enum FolioReaderError: Error, LocalizedError {
             return "Book title not available"
         case .fullPathEmpty:
             return "Book corrupted"
-        case .decrpytionFailed:
-            return "Book decryption failed"
         }
     }
 }
@@ -121,7 +110,6 @@ open class FolioReader: NSObject {
     open weak var readerCenter: FolioReaderCenter? {
         return self.readerContainer?.centerViewController
     }
-    private let transitionDelegate = FolioReaderTransitionDelegate()
 
     /// Check if reader is open
     var isReaderOpen = false
@@ -131,7 +119,7 @@ open class FolioReader: NSObject {
 
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {
-        return (BookProvider.shared.currentBook.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
+        return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
 
     func isNight<T>(_ f: T, _ l: T) -> T {
@@ -158,7 +146,6 @@ open class FolioReader: NSObject {
 }
 
 // MARK: - Present FolioReader
-
 extension FolioReader {
 
     /// Present a Folio Reader Container modally on a Parent View Controller.
@@ -166,25 +153,21 @@ extension FolioReader {
     /// - Parameters:
     ///   - parentViewController: View Controller that will present the reader container.
     ///   - epubPath: String representing the path on the disk of the ePub file. Must not be nil nor empty string.
-	///   - unzipPath: Path to unzip the compressed epub.
+    ///   - unzipPath: Path to unzip the compressed epub.
     ///   - config: FolioReader configuration.
     ///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, decryptionKey: String = "", animated:
+    open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
         Bool = true) {
-        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, decryptionKey: decryptionKey, removeEpub: shouldRemoveEpub)
-        self.readerContainer = readerContainer
+        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
         readerContainer.modalPresentationStyle = .overFullScreen
-        readerContainer.transitioningDelegate = transitionDelegate
-        parentViewController.present(readerContainer, animated: animated) {
-            NotificationCenter.default.post(name: .folioReaderPresentationCompleted, object: nil)
-        }
+        self.readerContainer = readerContainer
+        parentViewController.present(readerContainer, animated: animated, completion: nil)
         addObservers()
     }
 }
 
 // MARK: -  Getters and setters for stored values
-
 extension FolioReader {
 
     public func register(defaults: [String: Any]) {
@@ -199,12 +182,11 @@ extension FolioReader {
 
             if let readerCenter = self.readerCenter {
                 UIView.animate(withDuration: 0.6, animations: {
-                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))")
-                    readerCenter.currentPage?.backgroundColor = self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : self.readerContainer?.readerConfig.daysModeBackground
+                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))") { _ in }
                     readerCenter.pageIndicatorView?.reloadColors()
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber?.reloadColors()
-                    readerCenter.collectionView.backgroundColor = self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : self.readerContainer?.readerConfig.daysModeBackground
+                    readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
                 }, completion: { (finished: Bool) in
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
                 })
@@ -225,7 +207,7 @@ extension FolioReader {
         }
         set (font) {
             self.defaults.set(font.rawValue, forKey: kCurrentFontFamily)
-            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')")
+            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')") { _ in }
         }
     }
 
@@ -247,7 +229,7 @@ extension FolioReader {
                 return
             }
 
-            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')") { _ in }
         }
     }
 
@@ -305,41 +287,27 @@ extension FolioReader {
         }
     }
 
-    open var savedPositionForCurrentBook: CFI? {
+    open var savedPositionForCurrentBook: [String: Any]? {
         get {
-            guard let bookId = BookProvider.shared.currentBook.name,
-                let json = self.defaults.value(forKey: bookId) as? Data else {
+            guard let bookId = self.readerContainer?.book.name else {
                 return nil
             }
-            do {
-                let cfi = try JSONDecoder().decode(CFI.self, from: json)
-                return cfi
-            } catch {
-                print("decoding CFI failed")
-                return nil
-            }
+            return self.defaults.value(forKey: bookId) as? [String : Any]
         }
         set {
-            guard let bookId = BookProvider.shared.currentBook.name else {
+            guard let bookId = self.readerContainer?.book.name else {
                 return
             }
-            do {
-                let json = try JSONEncoder().encode(newValue)
-                self.defaults.set(json, forKey: bookId)
-            } catch {
-                print("encoding CFI failed")
-            }
+            self.defaults.set(newValue, forKey: bookId)
         }
     }
 }
 
 // MARK: - Metadata
-
 extension FolioReader {
 
     // TODO QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
     // Should we properly implement the parameter (what has been done now) or should change the API to only use the current FolioReader instance?
-
     /**
      Read Cover Image and Return an `UIImage`
      */
@@ -357,23 +325,25 @@ extension FolioReader {
 }
 
 // MARK: - Exit, save and close FolioReader
-
 extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
     @objc open func saveReaderState() {
-        guard isReaderOpen, let currentPage = self.readerCenter?.currentPage else { return }
-        
-        currentPage.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))", completionHandler: { [weak self] (callback, error) in
-            guard error == nil,
-                let strongSelf = self,
-                let currentPosition = callback as? String,
-                let currentPageNumber = strongSelf.readerCenter?.currentPageNumber,
-                let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition)
-                else { return }
-            strongSelf.savedPositionForCurrentBook = cfi
-            strongSelf.readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
-        })
+        guard isReaderOpen else {
+            return
+        }
+
+        guard let currentPage = self.readerCenter?.currentPage, let webView = currentPage.webView else {
+            return
+        }
+
+        let position = [
+            "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
+            "pageOffsetX": webView.scrollView.contentOffset.x,
+            "pageOffsetY": webView.scrollView.contentOffset.y
+            ] as [String : Any]
+
+        self.savedPositionForCurrentBook = position
     }
 
     /// Closes and save the reader current instance.
