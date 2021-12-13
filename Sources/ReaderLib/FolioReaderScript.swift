@@ -16,13 +16,13 @@ class FolioReaderScript: WKUserScript {
     }
     
     static let bridgeJS: FolioReaderScript = {
-        let jsURL = Bundle.frameworkBundle().url(forResource: "Bridge", withExtension: "js")!
+        let jsURL = Bundle.module.url(forResource: "Bridge", withExtension: "js")!
         let jsSource = try! String(contentsOf: jsURL)
         return FolioReaderScript(source: jsSource)
     }()
     
     static let cssInjection: FolioReaderScript = {
-        let cssURL = Bundle.frameworkBundle().url(forResource: "Style", withExtension: "css")!
+        let cssURL = Bundle.module.url(forResource: "Style", withExtension: "css")!
         let cssString = try! String(contentsOf: cssURL)
         return FolioReaderScript(source: cssInjectionSource(for: cssString))
     }()
