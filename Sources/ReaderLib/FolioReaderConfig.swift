@@ -8,7 +8,7 @@
 
 import UIKit
 
-import RealmSwift
+//import RealmSwift
 
 // MARK: - FolioReaderScrollDirection
 
@@ -98,28 +98,31 @@ open class FolioReaderConfig: NSObject {
     // MARK: Colors
 
     /// Base header custom TintColor
-    open var tintColor = UIColor(rgba: "#6ACC50")
+    open var tintColor = UIColor(rgba: "#F9F4F2")
 
     /// Menu background color
-    open var menuBackgroundColor = UIColor.white
+    open var menuBackgroundColor = UIColor(rgba: "#231E4E")
 
     /// Menu separator Color
     open var menuSeparatorColor = UIColor(rgba: "#D7D7D7")
 
     /// Menu text color
-    open var menuTextColor = UIColor(rgba: "#767676")
+    open var menuTextColor = UIColor(rgba: "#F9F4F2")
 
     /// Menu text color
-    open var menuTextColorSelected = UIColor(rgba: "#6ACC50")
+    open var menuTextColorSelected = UIColor(rgba: "#D2D3DB")
     
     // Day mode nav color
-    open var daysModeNavBackground = UIColor.white
+    open var daysModeNavBackground = UIColor(rgba: "#231E4E")
+
+    /// Day mode background color
+    open var daysModeBackground = UIColor(rgba: "#231E4E")
     
-    // Day mode nav color
+    // Night mode nav color
     open var nightModeNavBackground = UIColor(rgba: "#131313")
     
     /// Night mode background color
-    open var nightModeBackground = UIColor(rgba: "#131313")
+    open var nightModeBackground = UIColor(rgba: "#000000")
 
     /// Night mode menu background color
     open var nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
@@ -176,7 +179,7 @@ open class FolioReaderConfig: NSObject {
     // MARK: Realm
 
     /// Realm configuration for storing highlights
-    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
+//    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
 
     // MARK: Localized strings
 
@@ -205,6 +208,7 @@ open class FolioReaderConfig: NSObject {
     open var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
     open var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
     open var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
+    open var localizedPercentageOfBookCompleted = NSLocalizedString("book completed", comment: "")
     open var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
     open var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
     open var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")

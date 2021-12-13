@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "BitByteData",
+        "repositoryURL": "https://github.com/tsolomko/BitByteData",
+        "state": {
+          "branch": null,
+          "revision": "c119e12decae8f56066df3345a4ac1a05b2f06d5",
+          "version": "2.0.1"
+        }
+      },
+      {
         "package": "FontBlaster",
         "repositoryURL": "https://github.com/ArtSabintsev/FontBlaster.git",
         "state": {
@@ -44,6 +53,15 @@
           "branch": null,
           "revision": "c3c11a841642ac93c27bd1edd61f989fc0bfb809",
           "version": "11.6.1"
+        }
+      },
+      {
+        "package": "SWCompression",
+        "repositoryURL": "https://github.com/tsolomko/SWCompression.git",
+        "state": {
+          "branch": null,
+          "revision": "0ff80e30b6131df515601d698e007e18809431c5",
+          "version": "4.7.0"
         }
       },
       {
