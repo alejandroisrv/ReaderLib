@@ -181,10 +181,10 @@ open class FolioReaderConfig: NSObject {
     // MARK: Localized strings
 
     /// Localizes Highlight title
-    open var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
+    open var localizedHighlightsTitle = NSLocalizedString("Resaltados", comment: "")
 
     /// Localizes Content title
-    open var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
+    open var localizedContentsTitle = NSLocalizedString("Contenido", comment: "")
 
     /// Use the readers `UIMenuController` which enables the highlighting etc. The default is `true`. If set to false it's possible to modify the shared `UIMenuController` for yourself. Note: This doesn't disable the text selection in the web view.
     open var useReaderMenuController = true
@@ -194,13 +194,13 @@ open class FolioReaderConfig: NSObject {
 
     /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
     open var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
-    open var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
+    open var localizedHighlightMenu = NSLocalizedString("Resaltado", comment: "")
     open var localizedDefineMenu = NSLocalizedString("Define", comment: "")
     open var localizedPlayMenu = NSLocalizedString("Play", comment: "")
     open var localizedPauseMenu = NSLocalizedString("Pause", comment: "")
-    open var localizedFontMenuNight = NSLocalizedString("Night", comment: "")
+    open var localizedFontMenuNight = NSLocalizedString("Noche", comment: "")
     open var localizedPlayerMenuStyle = NSLocalizedString("Style", comment: "")
-    open var localizedFontMenuDay = NSLocalizedString("Day", comment: "")
+    open var localizedFontMenuDay = NSLocalizedString("Dia", comment: "")
     open var localizedLayoutHorizontal = NSLocalizedString("Horizontal", comment: "")
     open var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
     open var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
@@ -213,14 +213,14 @@ open class FolioReaderConfig: NSObject {
     open var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
     open var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
     open var localizedShareBy = NSLocalizedString("by", comment: "")
-    open var localizedCancel = NSLocalizedString("Cancel", comment: "")
-    open var localizedShare = NSLocalizedString("Share", comment: "")
+    open var localizedCancel = NSLocalizedString("Cancelar", comment: "")
+    open var localizedShare = NSLocalizedString("Compartir", comment: "")
     open var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
     open var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     open var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
     open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
-    open var localizedSave = NSLocalizedString("Save", comment: "")
-    open var localizedHighlightNote = NSLocalizedString("Note", comment: "")
+    open var localizedSave = NSLocalizedString("Guardar", comment: "")
+    open var localizedHighlightNote = NSLocalizedString("Nota", comment: "")
 
     public convenience init(withIdentifier identifier: String) {
         self.init()

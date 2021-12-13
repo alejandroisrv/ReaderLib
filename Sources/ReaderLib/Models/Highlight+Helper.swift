@@ -28,12 +28,12 @@ public enum HighlightStyle: Int {
      */
     public static func styleForClass(_ className: String) -> HighlightStyle {
         switch className {
-        case "highlight-yellow":    return .yellow
-        case "highlight-green":     return .green
-        case "highlight-blue":      return .blue
-        case "highlight-pink":      return .pink
+        case "highlight-yellow": return .yellow
+        case "highlight-green": return .green
+        case "highlight-blue": return .blue
+        case "highlight-pink": return .pink
         case "highlight-underline": return .underline
-        default:                    return .yellow
+        default: return .yellow
         }
     }
 
@@ -44,11 +44,11 @@ public enum HighlightStyle: Int {
 
         let enumStyle = (HighlightStyle(rawValue: style) ?? HighlightStyle())
         switch enumStyle {
-        case .yellow:       return "highlight-yellow"
-        case .green:        return "highlight-green"
-        case .blue:         return "highlight-blue"
-        case .pink:         return "highlight-pink"
-        case .underline:    return "highlight-underline"
+        case .yellow: return "highlight-yellow"
+        case .green: return "highlight-green"
+        case .blue: return "highlight-blue"
+        case .pink: return "highlight-pink"
+        case .underline: return "highlight-underline"
         }
     }
 
@@ -57,11 +57,11 @@ public enum HighlightStyle: Int {
     /// - Returns: Tuple of all color compnonents.
     private func colorComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         switch self {
-        case .yellow:       return (red: 255, green: 235, blue: 107, alpha: 0.9)
-        case .green:        return (red: 192, green: 237, blue: 114, alpha: 0.9)
-        case .blue:         return (red: 173, green: 216, blue: 255, alpha: 0.9)
-        case .pink:         return (red: 255, green: 176, blue: 202, alpha: 0.9)
-        case .underline:    return (red: 240, green: 40, blue: 20, alpha: 0.6)
+        case .yellow: return (red: 255, green: 235, blue: 107, alpha: 0.9)
+        case .green: return (red: 192, green: 237, blue: 114, alpha: 0.9)
+        case .blue: return (red: 173, green: 216, blue: 255, alpha: 0.9)
+        case .pink: return (red: 255, green: 176, blue: 202, alpha: 0.9)
+        case .underline: return (red: 240, green: 40, blue: 20, alpha: 0.6)
         }
     }
 
@@ -75,7 +75,7 @@ public enum HighlightStyle: Int {
     }
 }
 
-/// Completion block
+/// :nodoc:
 public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
@@ -286,12 +286,9 @@ extension Highlight {
     /// - Parameters:
     ///   - page: The page containing the HTML.
     ///   - highlightId: The ID to be removed
-    /// - Returns: The removed id
-    public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String, completion: @escaping JSCallback) {
-        guard let currentPage = page else { return }
-        
-        currentPage.webView?.js("removeHighlightById('\(highlightId)')", completion: completion)
-        
+    ///   - completion: JSCallback with removed id
+    public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String, completion: JSCallback? = nil) {
+        page?.webView?.js("removeHighlightById('\(highlightId)')", completion: completion)
     }
     
     /**

@@ -79,7 +79,7 @@ function setFontSize(cls) {
 }
 
 /*
- *	Native bridge Highlight text
+ *    Native bridge Highlight text
  */
 function highlightString(style) {
     var range = window.getSelection().getRangeAt(0);
@@ -171,8 +171,8 @@ var getRectForSelectedText = function(elm) {
 // Method that call that a hightlight was clicked
 // with URL scheme and rect informations
 var callHighlightURL = function(elm) {
-	event.stopPropagation();
-	var URLBase = "highlight://";
+    event.stopPropagation();
+    var URLBase = "highlight://";
     var currentHighlightRect = getRectForSelectedText(elm);
     thisHighlight = elm;
     
@@ -621,34 +621,34 @@ function wrappingSentencesWithinPTags(){
 // Class based onClick listener
 
 function addClassBasedOnClickListener(schemeName, querySelector, attributeName, selectAll) {
-	if (selectAll) {
-		// Get all elements with the given query selector
-		var elements = document.querySelectorAll(querySelector);
-		for (elementIndex = 0; elementIndex < elements.length; elementIndex++) {
-			var element = elements[elementIndex];
-			addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
-		}
-	} else {
-		// Get the first element with the given query selector
-		var element = document.querySelector(querySelector);
-		addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
-	}
+    if (selectAll) {
+        // Get all elements with the given query selector
+        var elements = document.querySelectorAll(querySelector);
+        for (elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+            var element = elements[elementIndex];
+            addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
+        }
+    } else {
+        // Get the first element with the given query selector
+        var element = document.querySelector(querySelector);
+        addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
+    }
 }
 
 function addClassBasedOnClickListenerToElement(element, schemeName, attributeName) {
-	// Get the content from the given attribute name
-	var attributeContent = element.getAttribute(attributeName);
-	// Add the on click logic
-	element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(attributeContent) + "\");");
+    // Get the content from the given attribute name
+    var attributeContent = element.getAttribute(attributeName);
+    // Add the on click logic
+    element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(attributeContent) + "\");");
 }
 
 var onClassBasedListenerClick = function(schemeName, attributeContent) {
-	// Prevent the browser from performing the default on click behavior
-	event.preventDefault();
-	// Don't pass the click event to other elemtents
-	event.stopPropagation();
-	// Create parameters containing the click position inside the web view.
-	var positionParameterString = "/clientX=" + event.clientX + "&clientY=" + event.clientY;
-	// Set the custom link URL to the event
-	window.location = schemeName + "://" + attributeContent + positionParameterString;
+    // Prevent the browser from performing the default on click behavior
+    event.preventDefault();
+    // Don't pass the click event to other elemtents
+    event.stopPropagation();
+    // Create parameters containing the click position inside the web view.
+    var positionParameterString = "/clientX=" + event.clientX + "&clientY=" + event.clientY;
+    // Set the custom link URL to the event
+    window.location = schemeName + "://" + attributeContent + positionParameterString;
 }
