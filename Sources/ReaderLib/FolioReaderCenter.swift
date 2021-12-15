@@ -264,7 +264,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let menu = UIBarButtonItem(image: closeIcon, style: .plain, target: self, action:#selector(closeReader(_:)))
         let toc = UIBarButtonItem(image: tocIcon, style: .plain, target: self, action:#selector(presentChapterList(_:)))
 
-        navigationItem.leftBarButtonItems = [menu, toc]
+        navigationItem.leftBarButtonItems = [menu]
 
         var rightBarIcons = [UIBarButtonItem]()
 
@@ -280,6 +280,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         font.width = space
 
         rightBarIcons.append(contentsOf: [font])
+        
+        //Disabled config and others options
+        rightBarIcons = [toc]
+        
         navigationItem.rightBarButtonItems = rightBarIcons
         
         if(self.readerConfig.displayTitle){

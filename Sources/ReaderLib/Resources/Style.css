@@ -40,6 +40,7 @@ html {
 body {
     padding: 40px 20px !important;
     overflow: hidden !important;
+    font-family: "Andada", sans-serif !important;
 }
 
 * {
@@ -76,7 +77,7 @@ ol ol, ol ul, ul ol, ul ul {
 }
 
 /* Links */
-a { -webkit-touch-callout: none; } /* Disable link callback */
+/*a { -webkit-touch-callout: none; }*/  /* Disable link callback */
 * { -webkit-user-select: text; }
 img { -webkit-user-select: none; }
 p {
@@ -93,7 +94,9 @@ code, kbd, pre, samp, tt {
     font-size: 1em;
 }
 button, input, select, textarea { display: inline-block !important; }
+
 /*h1, h2, h3, h4, h5, h6 { font-weight: 400!important; }*/
+
 del, s, strike { text-decoration: line-through!important; }
 hr {
     background-color: rgba(0,0,0,.1) !important;
@@ -276,7 +279,7 @@ body {
     -webkit-hyphens: auto !important;
     hyphens: auto !important;
 }
-p, span, div {
+p, span, div, li {
     font-size: 1em;
     line-height: 1.5 !important;
 }
