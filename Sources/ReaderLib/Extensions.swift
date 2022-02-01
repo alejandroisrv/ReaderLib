@@ -71,7 +71,7 @@ func delay(_ delay:Double, closure:@escaping ()->()) {
 
 internal extension Bundle {
     class func frameworkBundle() -> Bundle {
-        return Bundle(for: FolioReader.self)
+        return Bundle.module
     }
 }
 
