@@ -171,13 +171,13 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         fontName.addSegmentWithTitle("Lora", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Raleway", onSelectionImage: nil, offSelectionImage: nil)
 
-        fontName.segments[0].titleFont = UIFont(name: "Andada-Regular", size: 18)!
-        fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
-        fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
-        fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
+//        fontName.segments[0].titleFont = UIFont(name: "Andada-Regular", size: 18)!
+//        fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
+//        fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
+//        fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
 
         fontName.selectSegmentAtIndex(self.folioReader.currentFont.rawValue)
-//        menuView.addSubview(fontName)
+        menuView.addSubview(fontName)
 
         // Separator 2
         let line2 = UIView(frame: CGRect(x: 0, y: fontName.frame.height+fontName.frame.origin.y, width: view.frame.width, height: 1))
@@ -266,7 +266,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         case .horizontal, .horizontalWithVerticalContent:
             layoutDirection.selectSegmentAtIndex(FolioReaderScrollDirection.horizontal.rawValue)
         }
-//        menuView.addSubview(layoutDirection)
+        menuView.addSubview(layoutDirection)
     }
 
     // MARK: - SMSegmentView delegate

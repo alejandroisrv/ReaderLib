@@ -336,7 +336,7 @@ internal extension String {
 internal extension UIImage {
     
     convenience init?(readerImageNamed: String) {
-        self.init(named: readerImageNamed, in: Bundle.module, compatibleWith: nil)
+        self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
     }
     
     /// Forces the image to be colored with Reader Config tintColor

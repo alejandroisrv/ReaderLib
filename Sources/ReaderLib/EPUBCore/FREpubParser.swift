@@ -129,6 +129,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             throw FolioReaderError.fullPathEmpty
         }
         opfResource.mediaType = MediaType.by(fileName: fullPath)
+        opfResource.data = containerData
         book.opfResource = opfResource
         resourcesBasePath = bookBasePath.appendingPathComponent(book.opfResource.href.deletingLastPathComponent)
     }
@@ -162,6 +163,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             resource.fullHref = resourcesBasePath.appendingPathComponent(resource.href).removingPercentEncoding
             resource.mediaType = MediaType.by(name: $0.attributes["media-type"] ?? "", fileName: resource.href)
             resource.mediaOverlay = $0.attributes["media-overlay"]
+            resource.data = opfData
 
             // if a .smil file is listed in resources, go parse that file now and save it on book model
             if (resource.mediaType != nil && resource.mediaType == .smil) {

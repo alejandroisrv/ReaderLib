@@ -46,7 +46,7 @@ open class FolioReaderContainer: UIViewController {
         self.shouldRemoveEpub = removeEpub
         self.book = FRBook()
 
-        super.init(nibName: nil, bundle: Bundle.module)
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
 
         // Configure the folio reader.
         self.folioReader.readerContainer = self
@@ -77,7 +77,7 @@ open class FolioReaderContainer: UIViewController {
     /// Common Initialization
     fileprivate func initialization() {
         // Register custom fonts
-        FontBlaster.blast(bundle: Bundle.module)
+        FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
         // Register initial defaults
         self.folioReader.register(defaults: [

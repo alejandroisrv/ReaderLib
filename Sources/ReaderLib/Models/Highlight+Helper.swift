@@ -221,6 +221,7 @@ extension Highlight {
 }
 
 // MARK: - HTML Methods
+
 extension Highlight {
 
     public struct MatchingHighlight {
@@ -286,9 +287,21 @@ extension Highlight {
     /// - Parameters:
     ///   - page: The page containing the HTML.
     ///   - highlightId: The ID to be removed
-    ///   - completion: JSCallback with removed id
-    public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String, completion: JSCallback? = nil) {
-        page?.webView?.js("removeHighlightById('\(highlightId)')", completion: completion)
+    /// - Returns: The removed id
+    ///
+    @discardableResult public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String, completionHandler: ((String?) -> Void)? = nil) {
+        guard let currentPage = page else {
+            completionHandler?(nil)
+            return }
+
+        currentPage.webView?.js("removeHighlightById('\(highlightId)')", completionHandler: { (callback, error) in
+            guard error == nil, let removeId = callback as? String else {
+                print("Error removing Highlight from page")
+                completionHandler?(nil)
+                return
+            }
+            completionHandler?(removeId)
+        })
     }
     
     /**

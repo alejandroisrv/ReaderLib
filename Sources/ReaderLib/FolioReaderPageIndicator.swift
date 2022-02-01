@@ -5,6 +5,7 @@
 //  Created by Heberti Almeida on 10/09/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
+
 import UIKit
 
 class FolioReaderPageIndicator: UIView {
@@ -86,28 +87,15 @@ class FolioReaderPageIndicator: UIView {
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
+        let percentFormatter = NumberFormatter()
+        percentFormatter.numberStyle = NumberFormatter.Style.percent
+        percentFormatter.multiplier = 1
+        percentFormatter.minimumFractionDigits = 1
+        percentFormatter.maximumFractionDigits = 2
 
-        if pagesRemaining == 1 {
-            pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
-        } else {
-            pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
-        }
-
-        let minutesRemaining: Int
-        if totalPages == 0 {
-            minutesRemaining = 0
-        } else {
-            minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
-        }
-        if minutesRemaining > 1 {
-            minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
-        } else if minutesRemaining == 1 {
-            minutesLabel.text = self.readerConfig.localizedReaderOneMinute+" ·"
-        } else {
-            minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
-        }
-        
+        guard let currentProgress = folioReader.readerCenter?.getGlobalReadingProgress,
+            let percentAsString = percentFormatter.string(for: currentProgress * 100.0) else { return }
+        pagesLabel.text = "\(percentAsString) of " + self.readerConfig.localizedPercentageOfBookCompleted
         reloadView(updateShadow: false)
     }
 }

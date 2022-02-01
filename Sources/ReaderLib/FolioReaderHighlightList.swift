@@ -5,6 +5,7 @@
 //  Created by Heberti Almeida on 01/09/15.
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
+
 import UIKit
 
 class FolioReaderHighlightList: UITableViewController {
@@ -41,6 +42,7 @@ class FolioReaderHighlightList: UITableViewController {
     }
 
     // MARK: - Table view data source
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -174,6 +176,7 @@ class FolioReaderHighlightList: UITableViewController {
     }
 
     // MARK: - Table view delegate
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let highlight = highlights[safe: indexPath.row] else { return }
 
@@ -187,7 +190,7 @@ class FolioReaderHighlightList: UITableViewController {
 
             if (highlight.page == self.folioReader.readerCenter?.currentPageNumber),
                 let page = self.folioReader.readerCenter?.currentPage {
-                Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) { _ in } // Remove from HTML
+                Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId)
             }
 
             highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
