@@ -26,15 +26,8 @@ class FolioReaderPageIndicator: UIView {
 
         super.init(frame: frame)
 
-        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
+        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, self.readerConfig.daysModeBackground)
         backgroundColor = color
-        layer.shadowColor = color.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: -6)
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 4
-        layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-        layer.rasterizationScale = UIScreen.main.scale
-        layer.shouldRasterize = true
 
         pagesLabel = UILabel(frame: CGRect.zero)
         pagesLabel.font = UIFont(name: "Avenir-Light", size: 10)!
@@ -67,7 +60,7 @@ class FolioReaderPageIndicator: UIView {
     }
 
     func reloadColors() {
-        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
+        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, self.readerConfig.daysModeBackground)
         backgroundColor = color
 
         // Animate the shadow color change
@@ -83,7 +76,8 @@ class FolioReaderPageIndicator: UIView {
         layer.add(animation, forKey: "shadowColor")
 
         minutesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
-        pagesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+        // same color regardless of light or dark
+        pagesLabel.textColor = self.folioReader.isNight(self.readerConfig.menuTextColor, self.readerConfig.menuTextColor)
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
@@ -92,10 +86,12 @@ class FolioReaderPageIndicator: UIView {
         percentFormatter.multiplier = 1
         percentFormatter.minimumFractionDigits = 1
         percentFormatter.maximumFractionDigits = 2
-
+        
         guard let currentProgress = folioReader.readerCenter?.getGlobalReadingProgress,
             let percentAsString = percentFormatter.string(for: currentProgress * 100.0) else { return }
         pagesLabel.text = "\(percentAsString) of " + self.readerConfig.localizedPercentageOfBookCompleted
+        /*Oculta texto*/
+        pagesLabel.text = ""
         reloadView(updateShadow: false)
     }
 }
@@ -104,7 +100,7 @@ extension FolioReaderPageIndicator: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         // Set the shadow color to the final value of the animation is done
         if let keyPath = anim.value(forKeyPath: "keyPath") as? String , keyPath == "shadowColor" {
-            let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
+            let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, self.readerConfig.daysModeBackground)
             layer.shadowColor = color.cgColor
         }
     }

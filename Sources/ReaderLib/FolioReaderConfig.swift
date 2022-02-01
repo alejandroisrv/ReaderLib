@@ -8,7 +8,7 @@
 
 import UIKit
 
-import RealmSwift
+//import RealmSwift
 
 // MARK: - FolioReaderScrollDirection
 
@@ -112,17 +112,20 @@ open class FolioReaderConfig: NSObject {
     /// Menu text color
     open var menuTextColorSelected = UIColor(rgba: "#6ACC50")
     
+    /// Day mode background color
+    open var daysModeBackground = UIColor.white
+    
     // Day mode nav color
     open var daysModeNavBackground = UIColor.white
     
     // Day mode nav color
-    open var nightModeNavBackground = UIColor(rgba: "#131313")
+    open var nightModeNavBackground = UIColor(rgba: "#F4E49F")
     
     /// Night mode background color
     open var nightModeBackground = UIColor(rgba: "#131313")
 
     /// Night mode menu background color
-    open var nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
+    open var nightModeMenuBackground = UIColor(rgba: "#F4E49F")
 
     /// Night mode separator color
     open var nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
@@ -139,7 +142,7 @@ open class FolioReaderConfig: NSObject {
     open var scrollDirection: FolioReaderScrollDirection = .defaultVertical
 
     /// Enable or disable hability to user change scroll direction on menu.
-    open var canChangeScrollDirection = true
+    open var canChangeScrollDirection = false
 
     /// Enable or disable hability to user change font style on menu.
     open var canChangeFontStyle = true
@@ -148,7 +151,7 @@ open class FolioReaderConfig: NSObject {
     open var shouldHideNavigationOnTap = true
 
     /// Allow sharing option, if `false` will hide all sharing icons and options
-    open var allowSharing = true
+    open var allowSharing = false
 
     /// Enable TTS (Text To Speech)
     open var enableTTS = true
@@ -176,7 +179,7 @@ open class FolioReaderConfig: NSObject {
     // MARK: Realm
 
     /// Realm configuration for storing highlights
-    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
+//    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
 
     // MARK: Localized strings
 
@@ -205,6 +208,7 @@ open class FolioReaderConfig: NSObject {
     open var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
     open var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
     open var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
+    open var localizedPercentageOfBookCompleted = NSLocalizedString("book completed", comment: "")
     open var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
     open var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
     open var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")
@@ -221,7 +225,6 @@ open class FolioReaderConfig: NSObject {
     open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
     open var localizedSave = NSLocalizedString("Save", comment: "")
     open var localizedHighlightNote = NSLocalizedString("Note", comment: "")
-    open var localizedPercentageOfBookCompleted = NSLocalizedString("book completed", comment: "")
 
     public convenience init(withIdentifier identifier: String) {
         self.init()

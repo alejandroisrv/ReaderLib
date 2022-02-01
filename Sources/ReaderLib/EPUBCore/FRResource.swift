@@ -13,10 +13,10 @@ open class FRResource: NSObject {
     var properties: String?
     var mediaType: MediaType!
     var mediaOverlay: String?
-    var data: Data!
     
     public var href: String!
     public var fullHref: String!
+    public var data: Data!
 
     func basePath() -> String! {
         if href == nil || href.isEmpty { return nil }
