@@ -15,7 +15,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
 
-        .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.4.2"),
+        .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.4.1"),
         .package(url: "https://github.com/cxa/MenuItemKit.git", from: "4.0.0"),
         .package(url: "https://github.com/tadija/AEXML.git", from: "4.6.1"),
         .package(url: "https://github.com/ArtSabintsev/FontBlaster.git", from: "5.2.0"),
